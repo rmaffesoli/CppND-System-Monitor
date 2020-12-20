@@ -19,8 +19,27 @@ Processor& System::Cpu() {
     return cpu_; 
 }
 
-// TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() {
+    vector<int> pids{LinuxParser::Pids()};
+
+    set<int> current_pids;
+    for (Process const& proc : processes_) {
+        current_pids.insert(proc.Pid());
+    }
+
+    for (int pid : pids) {
+        if (current_pids.find(pid) == current_pids.end()) {
+            processes_.emplace_back(pid);
+        }
+    }
+
+    for (auto& proc : processes_) {
+        proc.CpuUtilization(LinuxParser::ActiveJiffies(proc.Pid()), 
+                            LinuxParser::Jiffies());
+    }
+
+    std::sort(processes_.begin(), processes_.end(), std::greater<Process>());
+
     return processes_; 
 }
 
