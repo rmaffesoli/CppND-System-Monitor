@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <cstddef>
+#include <map>
 #include <set>
 #include <string>
 #include <vector>
@@ -10,6 +11,7 @@
 #include "processor.h"
 #include "system.h"
 
+using std::map;
 using std::set;
 using std::size_t;
 using std::string;
