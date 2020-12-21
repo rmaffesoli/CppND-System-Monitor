@@ -177,19 +177,19 @@ int LinuxParser::TotalProcesses() {
 
 int LinuxParser::RunningProcesses() {
   string line, key;
-  int running_processes = 0;
+  string value = "0";
   std::ifstream filestream(kProcDirectory + kStatFilename);
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
       std::istringstream linestream(line);
-      linestream >> key;
+      while (linestream >> key >> value){
         if (key == "procs_running") {
-          linestream >> running_processes;
-          break;
+          return stoi(value); 
         }
       }
     }
-  return running_processes; 
+  }
+  return stoi(value);
 }
 
 string LinuxParser::Command(int pid) {
